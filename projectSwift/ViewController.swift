@@ -8,22 +8,46 @@
 
 import UIKit
 import AVFoundation
+import Speech
 
-
-class ViewController: UIViewController {
-
-    var tts : Tts!
+class ViewController: UIViewController, SFSpeechRecognizerDelegate{
+    
+    var tts = Tts()
+    var stt = Stt()
+    var string : String!
+    
+    
+    
+    
+    @IBOutlet var btn: UIButton!
     
     override func viewDidLoad() {
         print("화면실행")
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
-        tts = Tts()
-        tts.speak(sentence: "안녕하세요")
+        stt.speechReconizer?.delegate = self
         
     }
-
-
+    
+    
+    
+    
+    
+    @IBAction func btnClick(_ sender: Any) {
+        
+        if stt.audioEngine.isRunning{
+            stt.audioEngine.stop()
+            stt.recognitionRequest?.endAudio()
+            btn.isEnabled = false
+            btn.setTitle("인식", for: .normal)
+        }else{
+            
+            btn.setTitle("인식중", for: .normal)
+            
+        }
+        
+    }
 }
+
+
+
 

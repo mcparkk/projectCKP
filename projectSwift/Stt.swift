@@ -10,29 +10,25 @@ import UIKit
 import AVFoundation
 import Speech
 
-
-class Stt: UIViewController, SFSpeechRecognizerDelegate{
+class Stt {
     
-    
-    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
-    private var recogntionTask: SFSpeechRecognitionTask?
-    private let audioEngine = AVAudioEngine()
+    public var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    public var recogntionTask: SFSpeechRecognitionTask?
+    public let audioEngine = AVAudioEngine()
     let audioSession = AVAudioSession.sharedInstance()
-    private let speechReconizer = SFSpeechRecognizer(locale: .init(identifier: "ko_KR"))
+    public let speechReconizer = SFSpeechRecognizer(locale: .init(identifier: "ko_KR"))
     
+    //    func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool, button:UIButton) {
+    //        if available{
+    //            button.isEnabled = true
+    //            //code
+    //        }else{
+    //            button.isEnabled = false
+    //            //code
+    //        }
+    //    }
     
-//    func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available: Bool) {
-//        if available{
-//            //btnStt.isEnabled = true
-//            //code
-//        }else{
-//            //btnStt.isEnabled = false
-//            //code
-//        }
-//    }
-    
-    
-    func startRecoding (){
+    func startRecoding (botton : UIButton) {
         if recogntionTask != nil{
             recogntionTask?.cancel()
             recogntionTask = nil
@@ -57,7 +53,7 @@ class Stt: UIViewController, SFSpeechRecognizerDelegate{
             
             if result != nil{
                 
-                //self.lblText.text = result?.bestTranscription.formattedString
+                
                 //result?.bestTranscription.formattedString를 원하는 형식에 저장
                 isFinal = (result?.isFinal)!
             }
@@ -68,9 +64,10 @@ class Stt: UIViewController, SFSpeechRecognizerDelegate{
                 self.recognitionRequest = nil
                 self.recogntionTask = nil
                 
-                //self.btnStt.isEnabled = true
             }
         })
+        
+        
         let recordingFormat = inputNode.outputFormat(forBus: 0)
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat){ (buffer, when) in
             self.recognitionRequest?.append(buffer)
@@ -83,5 +80,8 @@ class Stt: UIViewController, SFSpeechRecognizerDelegate{
         }catch{
             print("에러때문에 오디오 엔진 실행 안된다능")
         }
+        
+        
     }
+    
 }
